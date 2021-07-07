@@ -1,0 +1,51 @@
+﻿@model ManyToManyCore.Models.ProjectViewModel
+@{
+    ViewData["Title"] = "The List of Projects";
+}
+
+<h4>@ViewData["Title"]</h4>
+<a asp-action="Create"
+   class="btn btn-sm btn-primary">Create a project</a>
+
+<div id="Left">
+    @await Html.PartialAsync("_ProjectStudentSeek")
+</div>
+
+<div id="Right">
+    <table class="table table-sm table-striped">
+        <tr><th>Projects</th><th>Date</th><th>Students</th><th></th></tr>
+        @if (Model.Projects?.Count() > 0)
+        {
+            @foreach (var p in Model.Projects)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Project"  asp-action="Edit"
+                           asp-route-id="@p.Id">@p.Name</a>
+                    </td>
+                    @if (p.Date == null)
+                    {
+                        <td>No Data</td>
+                    }
+                    else
+                    {
+                        <td>@String.Format("{0:dd/MM/yyyy}", p.Date)</td>
+                    }
+                    <td>
+
+                        @foreach (var sp in p.StudentProjectJunction)
+                        {
+                            <br />
+                            <a asp-controller="Students"   asp-action="Edit"
+                               asp-route-id="@sp.Student.Id">@sp.Student.LastName</a>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@p.Id"
+                           class="btn btn-sm btn-primary">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

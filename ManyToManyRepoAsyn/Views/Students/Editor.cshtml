@@ -1,0 +1,64 @@
+﻿@model ManyToManyCore.Models.Student
+@{
+    ViewData["Title"] = "Editor";
+    Layout = "_Layout";
+}
+
+    <form asp-action="Update" method="post" class="p-2">
+        <!-- <div class="m-1 p-1">-->
+
+        <input type="hidden" name="Id" value="@Model.Id" />
+
+        <h4>@ViewData["Title"]</h4>
+        <div class="p-1">
+            <div class="row">
+                <div class="col"><strong>LastName</strong></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input asp-for="@Model.LastName" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col"><strong>Data </strong></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input asp-for="@Model.Date" />
+                </div>
+            </div>
+        </div>
+
+        @foreach (var item in ViewBag.Projects)
+        {
+            <div class="form-row">
+                <div class="form-group col-1">
+                    @if (Model.StudentProjectJunction.Any(sp => sp.ProjectId == item.Id))
+                    {
+                        <input type="checkbox" name="checkbox" value="@item.Id" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="checkbox" value="@item.Id" />
+                    }
+                </div>
+                <div class="form-group col">
+                    <label class="form-control-label">@item.Name</label>
+                </div>
+            </div>
+        }
+
+        <br><br>
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">Save and exit</button>
+                <a asp-controller="Project"
+                   asp-action="Index" class="btn btn-secondary">
+                    To the list of projects
+                </a>
+                <a asp-controller="Students"
+                   asp-action="Index" class="btn btn-secondary">
+                    To the list of studens
+                </a>
+
+            </div>
+    </form>
